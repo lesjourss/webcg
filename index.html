@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KasihCare – Perawatan dengan Kasih Sayang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Variables ─── */
+    :root {
+      --background: #FAF8F5;
+      --foreground: #2D3748;
+      --card: #ffffff;
+      --primary: #5B9BD5;
+      --primary-fg: #ffffff;
+      --secondary: #A8D5BA;
+      --secondary-fg: #2D3748;
+      --muted: #F5F5DC;
+      --muted-fg: #718096;
+      --accent: #FF9F5A;
+      --accent-fg: #ffffff;
+      --border: rgba(0,0,0,0.08);
+      --radius: 0.75rem;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 20px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ─── Scroll-reveal animation ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Hero entrance animations ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .hero-badge   { animation: fadeUp 0.6s ease 0.2s both; }
+    .hero-title   { animation: fadeUp 0.7s ease 0.35s both; }
+    .hero-desc    { animation: fadeUp 0.6s ease 0.5s both; }
+    .hero-btns    { animation: fadeUp 0.6s ease 0.65s both; }
+    .hero-stats   { animation: fadeIn 0.8s ease 0.85s both; }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(250,248,245,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--foreground);
+    }
+
+    .nav-logo svg {
+      width: 2rem; height: 2rem;
+      color: var(--primary);
+      fill: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      color: rgba(45,55,72,0.65);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--foreground); }
+
+    .btn-nav {
+      padding: 0.6rem 1.4rem;
+      background: var(--accent);
+      color: var(--accent-fg);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .btn-nav:hover { opacity: 0.88; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+
+    /* ─── Hero ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 5rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(91,155,213,0.12) 0%, transparent 70%),
+        var(--background);
+    }
+
+    .hero-inner {
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: rgba(168,213,186,0.25);
+      color: var(--secondary-fg);
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 7vw, 4.5rem);
+      line-height: 1.15;
+      color: var(--foreground);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .highlight { color: var(--primary); }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: rgba(45,55,72,0.7);
+      max-width: 680px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 0.9rem 2.2rem;
+      background: var(--primary);
+      color: var(--primary-fg);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .btn-outline {
+      padding: 0.9rem 2.2rem;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { background: rgba(91,155,213,0.06); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--foreground);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(45,55,72,0.55);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── Section base ─── */
+    section { padding: 5.5rem 1.5rem; }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--foreground);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: rgba(45,55,72,0.65);
+      max-width: 520px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    /* ─── Why Us ─── */
+    #tentang { background: var(--background); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .why-card { text-align: center; }
+
+    .why-icon {
+      width: 4rem; height: 4rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .why-icon svg { width: 2rem; height: 2rem; }
+
+    .why-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .why-card p {
+      font-size: 0.95rem;
+      color: rgba(45,55,72,0.68);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    /* ─── Services ─── */
+    #layanan { background: var(--card); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card { cursor: default; }
+
+    .service-img-wrap {
+      overflow: hidden;
+      border-radius: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .service-img-wrap img {
+      width: 100%;
+      height: 15rem;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .service-card:hover .service-img-wrap img { transform: scale(1.05); }
+
+    .service-tag {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      background: rgba(91,155,213,0.12);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      font-size: 0.93rem;
+      color: rgba(45,55,72,0.68);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ─── Process ─── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .process-step { position: relative; }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: rgba(91,155,213,0.18);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .process-step h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .process-step p {
+      font-size: 0.9rem;
+      color: rgba(45,55,72,0.62);
+      font-weight: 300;
+    }
+
+    .step-connector {
+      display: none;
+      position: absolute;
+      top: 2.5rem;
+      right: -1rem;
+      width: 2rem;
+      height: 2px;
+      background: rgba(91,155,213,0.3);
+    }
+
+    @media (min-width: 768px) {
+      .step-connector { display: block; }
+    }
+
+    /* ─── Testimonials ─── */
+    #testimoni { background: var(--card); }
+
+    .testimonial-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--background);
+      padding: 3rem;
+      border-radius: 1.5rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .testimonial-card.hidden-left  { opacity: 0; transform: translateX(-40px); pointer-events: none; position: absolute; }
+    .testimonial-card.hidden-right { opacity: 0; transform: translateX(40px);  pointer-events: none; position: absolute; }
+
+    .testi-img {
+      width: 5.5rem; height: 5.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .testi-content { flex: 1; }
+
+    .testi-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgba(45,55,72,0.8);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .testi-name {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .testi-role {
+      font-size: 0.85rem;
+      color: rgba(45,55,72,0.55);
+    }
+
+    .testi-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .testi-btn {
+      width: 2.75rem; height: 2.75rem;
+      border-radius: 50%;
+      border: none;
+      background: rgba(91,155,213,0.12);
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .testi-btn:hover { background: rgba(91,155,213,0.22); }
+    .testi-btn svg { width: 1.25rem; height: 1.25rem; }
+
+    .testi-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .dot {
+      width: 0.5rem; height: 0.5rem;
+      border-radius: 999px;
+      background: rgba(91,155,213,0.3);
+      border: none;
+      cursor: pointer;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .dot.active {
+      width: 2rem;
+      background: var(--primary);
+    }
+
+    .testi-slider {
+      position: relative;
+      min-height: 14rem;
+    }
+
+    @media (max-width: 600px) {
+      .testimonial-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* ─── CTA ─── */
+    #konsultasi {
+      background: var(--primary);
+      color: var(--primary-fg);
+      padding: 5.5rem 1.5rem;
+    }
+
+    #konsultasi .section-title { color: var(--primary-fg); }
+
+    .cta-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta-desc {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .btn-white {
+      padding: 0.9rem 2rem;
+      background: #fff;
+      color: var(--primary);
+      border-radius: var(--radius);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+
+    .btn-white-outline {
+      padding: 0.9rem 2rem;
+      border: 2px solid #fff;
+      color: #fff;
+      border-radius: var(--radius);
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-white-outline:hover { background: rgba(255,255,255,0.1); }
+
+    .cta-checks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta-check {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .cta-check svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--foreground);
+      color: var(--background);
+      padding: 4rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand svg { width: 2rem; height: 2rem; fill: var(--primary); color: var(--primary); }
+
+    .footer-desc {
+      font-size: 0.9rem;
+      color: rgba(250,248,245,0.6);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    .social-icons { display: flex; gap: 0.75rem; }
+
+    .social-icon {
+      width: 2.4rem; height: 2.4rem;
+      border-radius: 50%;
+      background: rgba(91,155,213,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--primary);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .social-icon:hover { background: rgba(91,155,213,0.32); }
+
+    .footer-col h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: var(--background);
+    }
+
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      color: rgba(250,248,245,0.58);
+      transition: color 0.2s;
+      font-weight: 300;
+    }
+    .footer-col a:hover { color: var(--background); }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.9rem;
+      color: rgba(250,248,245,0.58);
+      font-weight: 300;
+    }
+
+    .footer-contact-item svg { width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; flex-shrink: 0; }
+
+    /* ─── RS Coverage ─── */
+    .rs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+ 
+    .rs-region {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+    }
+ 
+    .rs-region-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+ 
+    .rs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+ 
+    .rs-list li {
+      font-size: 0.88rem;
+      color: var(--foreground);
+      font-weight: 300;
+      padding-left: 0.9rem;
+      position: relative;
+    }
+ 
+    .rs-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 50%;
+      background: var(--secondary);
+    }
+
+    /* ─── Disclaimer ─── */
+    .disclaimer-box {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      background: rgba(255,159,90,0.07);
+      border: 1px solid rgba(255,159,90,0.25);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+    }
+ 
+    .disclaimer-icon {
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+ 
+    .disclaimer-icon svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      color: var(--accent);
+    }
+ 
+    .disclaimer-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+ 
+    .disclaimer-text {
+      font-size: 0.88rem;
+      color: var(--muted-fg);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ─── New Service Cards ─── */
+    .svc-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .svc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.75rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .svc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: box-shadow 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .svc-card:hover {
+      box-shadow: 0 16px 40px rgba(0,0,0,0.09);
+      transform: translateY(-4px);
+    }
+
+    .svc-icon {
+      width: 3.25rem; height: 3.25rem;
+      border-radius: 1rem;
+      background: rgba(91,155,213,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: background 0.3s;
+    }
+
+    .svc-card:hover .svc-icon {
+      background: var(--primary);
+    }
+
+    .svc-icon svg {
+      width: 1.4rem; height: 1.4rem;
+      color: var(--primary);
+      transition: color 0.3s;
+    }
+
+    .svc-card:hover .svc-icon svg {
+      color: #fff;
+    }
+
+    .svc-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      color: var(--foreground);
+    }
+
+    .svc-card > p {
+      font-size: 0.9rem;
+      color: var(--muted-fg);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      font-weight: 300;
+    }
+
+    .svc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .svc-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--foreground);
+    }
+
+    .svc-list li svg {
+      width: 1rem; height: 1rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(250,248,245,0.15);
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(250,248,245,0.45);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        OmahCaregiver
+      </a>
+      <ul class="nav-links">
+        <li><a href="#layanan">Layanan</a></li>
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#testimoni">Testimoni</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+      <a href="#konsultasi" class="btn-nav">Konsultasi Gratis</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-inner">
+
+      <h1 class="hero-title">
+        Tenang Bekerja, <br />
+        <span class="highlight">Orang Tua Tercinta</span> <br />
+        Terawat dengan Kasih Sayang
+      </h1>
+
+      <p class="hero-desc">
+        Layanan caregiver berpengalaman dan tersertifikasi untuk pendampingan lansia, perawatan pasca operasi, dan kebutuhan kesehatan di rumah. Kami hadir dengan hati, bukan hanya tugas.
+      </p>
+
+      <div class="btn-group hero-btns">
+        <a href="#konsultasi" class="btn-primary">Konsultasi Gratis</a>
+        <a href="#layanan" class="btn-outline">Lihat Layanan</a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">1000+</div>
+          <div class="stat-label">Keluarga Terlayani</div>
+        </div>
+        <div>
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Caregiver Profesional</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">Tersedia</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section id="tentang">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Kenapa Memilih Kami?</h2>
+        <p class="section-subtitle">Kami bukan hanya penyedia jasa, tapi mitra terpercaya dalam merawat orang yang Anda cintai</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal reveal-delay-1">
+          <div class="why-icon" style="background: rgba(91,155,213,0.1);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Tim Profesional &amp; Bersertifikat</h3>
+          <p>Setiap caregiver kami telah melewati pelatihan medis dasar, background check menyeluruh, dan memiliki sertifikasi resmi. Anda bisa tenang, orang tua Anda dalam tangan yang tepat.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-2">
+          <div class="why-icon" style="background: rgba(168,213,186,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--secondary-fg);">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3>Dipercaya Lebih dari 1.000 Keluarga</h3>
+          <p>Sejak 2020, kami telah membantu ribuan keluarga di Indonesia menemukan caregiver yang cocok. Testimoni positif dan loyalitas klien adalah bukti komitmen kami.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-3">
+          <div class="why-icon" style="background: rgba(255,159,90,0.1);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent);">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Fleksibel &amp; Personal</h3>
+          <p>Layanan kami dirancang sesuai kebutuhan Anda – mulai dari beberapa jam per hari hingga tinggal 24 jam. Kami mendengarkan, lalu menyesuaikan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="layanan" style="background: var(--background);">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="svc-eyebrow">Layanan Kami</p>
+        <h2 class="section-title">Solusi Perawatan Terlengkap<br>untuk Keluarga</h2>
+        <p class="section-subtitle">Kami menyediakan berbagai pilihan layanan yang dapat disesuaikan dengan kondisi dan kebutuhan orang terkasih Anda.</p>
+      </div>
+      <div class="svc-grid">
+
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h4>Caregiver</h4>
+          <p>Pendampingan harian profesional untuk lansia agar tetap sehat, aktif, dan terjaga kebersihannya.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pendamping Rawat Inap</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pendamping Kontrol RS</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pengurusan Administrasi</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pengambilan Hasil Lab/Obat</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-delay-2">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h4>Caregiver Medis</h4>
+          <p>Perawatan intensif bagi pasien pasca operasi atau yang membutuhkan tindakan medis berkelanjutan.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Perawatan Luka Bedah</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pemasangan Infus/Kateter</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Penggantian NGT</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Perawatan Trakeostomi</li>
+            
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-delay-3">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h4>Layanan Injeksi Nutrisi</h4>
+          <p>Pemberian vitamin dan nutrisi esensial melalui injeksi untuk penyerapan maksimal guna menjaga vitalitas, pemulihan fisik, dan perlindungan saraf secara instan.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Suntik Vitamin C</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Suntik Vit. B Complex</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Suntik Neurobion (B12)</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h4>Teman Bicara</h4>
+          <p>Fokus pada stimulasi mental bagi lansia dengan demensia atau yang membutuhkan dukungan emosional.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Terapi Kenangan (Reminiscence)</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Menemani Hobi &amp; Ngobrol</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Melatih Fokus &amp; Ingatan</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-delay-2">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <h4>Fisioterapi Rumah</h4>
+          <p>Sesi terapi fisik yang dilakukan di rumah untuk mengembalikan fungsi gerak tubuh yang terganggu.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Terapi Pasca Cedera</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Manajemen Nyeri Otot</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Konsultasi Progres Rutin</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Membantu Stimulasi Kognitif</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-delay-3">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>
+          </div>
+          <h4>Homecare Lansia</h4>
+          <p>Layanan pendampingan harian bagi lansia yang berfokus pada kualitas hidup, kenyamanan di rumah sendiri, dan bantuan aktivitas personal secara menyeluruh dan penuh kasih.</p>
+          <ul class="svc-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Manajemen Nutrisi & Diet</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pengelolaan Obat</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Pemantauan Kesehatan</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Rehabilitasi</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RS Coverage -->
+  <section id="jangkauan" style="background: var(--card);">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Telah Melayani Pasien di Berbagai Rumah Sakit Ternama</h2>
+        <p class="section-subtitle">Caregiver kami sudah berpengalaman dan terlatih untuk menjaga dan mendampingi pasien baik di rumah maupun di RS 24/7.</p>
+      </div>
+      <div class="rs-grid reveal">
+        <div class="rs-region">
+          <div class="rs-region-label">Jakarta Timur</div>
+          <ul class="rs-list">
+            <li>RS Adhiyaksa</li>
+            <li>RS Budi Asih</li>
+            <li>RS Polri Kramat Jati</li>
+            <li>RS Persahabatan</li>
+            <li>RS PON Jaktim</li>
+          </ul>
+        </div>
+        <div class="rs-region">
+          <div class="rs-region-label">Jakarta Barat</div>
+          <ul class="rs-list">
+            <li>RS Hermina Daan Mogot</li>
+            <li>RS Harapan Kita</li>
+            <li>RS Darmais</li>
+            <li>RS Pelni</li>
+          </ul>
+        </div>
+        <div class="rs-region">
+          <div class="rs-region-label">Jakarta Selatan</div>
+          <ul class="rs-list">
+            <li>RS Fatmawati</li>
+            <li>RS Prikasih</li>
+            <li>RS Setia Mitra</li>
+            <li>RS Kebayoran</li>
+            <li>RSPPN Sudirman</li>
+            <li>RS Siloam</li>
+          </ul>
+        </div>
+        <div class="rs-region">
+          <div class="rs-region-label">Tangerang</div>
+          <ul class="rs-list">
+            <li>RS Primaya Tangerang</li>
+            <li>RS Mayada</li>
+            <li>RS Sari Asih Sangiang</li>
+            <li>RS EMC Tangerang</li>
+            <li>RS EMC Alam Sutra</li>
+            <li>RS Bakti Asih Ciledug</li>
+            <li>RS Sari Asih Ciledug</li>
+            <li>RS Hermina Ciputat</li>
+            <li>RSUD Tangsel</li>
+            <li>RS Mitra Keluarga Bintaro</li>
+            <li>RS Bethsaida Serpong</li>
+            <li>RS Murni Teguh</li>
+          </ul>
+        </div>
+        <div class="rs-region">
+          <div class="rs-region-label">Bekasi & Bogor</div>
+          <ul class="rs-list">
+            <li>RS Hermina Galaxi Bekasi</li>
+            <li>RS Primaya Bekasi</li>
+            <li>RS Setia Mitra Cibinong</li>
+            <li>RSUD Bogor</li>
+            <li>RS Marzoeki Mahdi</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <section id="disclaimer" style="background: var(--background); padding: 2.5rem 1.5rem;">
+    <div class="container">
+      <div class="disclaimer-box reveal">
+        <div class="disclaimer-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="disclaimer-content">
+          <p class="disclaimer-title">Catatan Penting</p>
+          <p class="disclaimer-text">Layanan kami adalah penyedia jasa caregiver independen. Daftar rumah sakit yang tertera merupakan lokasi di mana caregiver kami pernah memberikan pelayanan pendampingan atas permintaan keluarga pasien dan menunjukkan pengalaman jangkauan layanan kami. Kami bukan bagian dari manajemen rumah sakit tersebut. Segala tindakan medis tetap menjadi wewenang pihak rumah sakit, sementara caregiver kami fokus pada pendampingan non-medis dan kenyamanan pasien.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Cara Mudah Memulai</h2>
+        <p class="section-subtitle">Hanya 4 langkah sederhana untuk mendapatkan caregiver terbaik</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <h3>Konsultasi</h3>
+          <p>Hubungi kami untuk diskusi kebutuhan perawatan</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-num">02</div>
+          <h3>Pilih Caregiver</h3>
+          <p>Kami rekomendasikan caregiver yang sesuai</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <h3>Atur Jadwal</h3>
+          <p>Tentukan waktu dan durasi layanan</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-4">
+          <div class="step-num">04</div>
+          <h3>Mulai Layanan</h3>
+          <p>Caregiver siap merawat dengan sepenuh hati</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimoni">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Kata Mereka</h2>
+        <p class="section-subtitle">Kepercayaan keluarga adalah penghargaan terbesar kami</p>
+      </div>
+      <div class="testimonial-wrap reveal">
+        <div class="testi-slider" id="testiSlider">
+          <!-- Cards injected by JS -->
+        </div>
+        <div class="testi-controls">
+          <button class="testi-btn" id="prevBtn" aria-label="Sebelumnya">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="testi-btn" id="nextBtn" aria-label="Berikutnya">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="testi-dots" id="testiDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="konsultasi">
+    <div class="cta-inner">
+      <h2 class="section-title reveal" style="color:#fff;">Siap Memberikan Perawatan Terbaik untuk Orang Terkasih?</h2>
+      <p class="cta-desc reveal">Konsultasi gratis tanpa komitmen. Tim kami siap membantu Anda 24/7.</p>
+      <div class="cta-btns reveal">
+        <a href="https://wa.me/6287775292387" class="btn-white">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.1rem;height:1.1rem;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3-8.63 2 2 0 0 1 1.998-2.18h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          WhatsApp: 0877-7529-2387
+        </a>
+      </div>
+      <div class="cta-checks reveal">
+        <div class="cta-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Respon cepat dalam &lt;15 menit
+        </div>
+        <div class="cta-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Tanpa biaya konsultasi
+        </div>
+        <div class="cta-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Caregiver terverifikasi
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="kontak">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          KasihCare
+        </div>
+        <p class="footer-desc">Penyedia layanan caregiver profesional dan terpercaya untuk perawatan lansia dan pasien di rumah. Kami hadir dengan kasih sayang dan dedikasi penuh.</p>
+        <div class="social-icons">
+          <div class="social-icon">f</div>
+          <div class="social-icon">in</div>
+          <div class="social-icon">ig</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Layanan</h4>
+        <ul>
+          <li><a href="#">Pendampingan Lansia</a></li>
+          <li><a href="#">Perawatan Pasca Operasi</a></li>
+          <li><a href="#">Teman Ngobrol</a></li>
+          <li><a href="#">Perawatan Live-in</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <ul>
+          <li class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3-8.63 2 2 0 0 1 1.998-2.18h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            0812-3456-789
+          </li>
+          <li class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            info@kasihcare.id
+          </li>
+          <li class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Jl. Merdeka No. 123<br />Jakarta Selatan 12345
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 KasihCare. Semua hak dilindungi.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ─── Testimonial data ─── */
+    const testimonials = [
+      {
+        name: "Siti Rahmawati",
+        role: "Anak dari Ibu Maryam (72 tahun)",
+        content: "Saya sangat berterima kasih kepada tim caregiver yang merawat ibu saya. Mereka tidak hanya profesional, tapi juga sangat sabar dan penyayang. Ibu saya sekarang lebih ceria dan saya bisa bekerja dengan tenang.",
+        image: "https://images.unsplash.com/photo-1616286608358-0e1b143f7d2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+      },
+      {
+        name: "Budi Santoso",
+        role: "Suami dari Ny. Rita (pasca operasi)",
+        content: "Caregiver yang ditugaskan sangat membantu selama masa pemulihan istri saya. Mereka datang tepat waktu, teliti dalam memberikan perawatan, dan selalu update kondisi istri saya. Highly recommended!",
+        image: "https://images.unsplash.com/photo-1626668011687-8a114cf5a34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+      },
+      {
+        name: "Dewi Lestari",
+        role: "Anak dari Bapak Hadi (75 tahun)",
+        content: "Bapak saya yang tinggal sendiri sekarang punya teman yang bisa diajak ngobrol setiap hari. Caregivernya sangat ramah dan sabar. Terima kasih sudah menjaga bapak seperti keluarga sendiri.",
+        image: "https://images.unsplash.com/photo-1758686253896-e6c76b6f7aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+      }
+    ];
+
+    let current = 0;
+    const slider = document.getElementById('testiSlider');
+    const dotsContainer = document.getElementById('testiDots');
+
+    function buildCard(t) {
+      return `
+        <div class="testimonial-card">
+          <img class="testi-img" src="${t.image}" alt="${t.name}" loading="lazy" />
+          <div class="testi-content">
+            <p class="testi-quote">"${t.content}"</p>
+            <div class="testi-name">${t.name}</div>
+            <div class="testi-role">${t.role}</div>
+          </div>
+        </div>`;
+    }
+
+    function buildDots() {
+      dotsContainer.innerHTML = '';
+      testimonials.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'dot' + (i === current ? ' active' : '');
+        btn.setAttribute('aria-label', `Testimoni ${i + 1}`);
+        btn.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(btn);
+      });
+    }
+
+    function goTo(index, dir = 1) {
+      const oldCard = slider.querySelector('.testimonial-card');
+
+      // Animate out
+      if (oldCard) {
+        oldCard.style.transition = 'opacity 0.3s, transform 0.3s';
+        oldCard.style.opacity = '0';
+        oldCard.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
+        setTimeout(() => { oldCard.remove(); }, 300);
+      }
+
+      current = (index + testimonials.length) % testimonials.length;
+
+      setTimeout(() => {
+        slider.insertAdjacentHTML('beforeend', buildCard(testimonials[current]));
+        const newCard = slider.querySelector('.testimonial-card');
+        newCard.style.opacity = '0';
+        newCard.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
+        requestAnimationFrame(() => {
+          newCard.style.transition = 'opacity 0.4s, transform 0.4s';
+          newCard.style.opacity = '1';
+          newCard.style.transform = 'translateX(0)';
+        });
+        buildDots();
+      }, oldCard ? 200 : 0);
+    }
+
+    // Init
+    slider.insertAdjacentHTML('beforeend', buildCard(testimonials[current]));
+    buildDots();
+
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, -1));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, 1));
+
+    /* ─── Scroll Reveal ─── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
